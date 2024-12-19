@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipmitool
 PKG_VERSION:=1.8.19
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://codeberg.org/IPMITool/ipmitool
@@ -44,6 +44,10 @@ define Package/ipmitool/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ipmitool $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ipmievd $(1)/usr/sbin/
+
+	$(INSTALL_DIR) $(1)/usr/share/misc/
+	$(INSTALL_DATA) ./files/usr/share/misc/enterprise-numbers.txt \
+		$(1)/usr/share/misc/enterprise-numbers
 endef
 
 CONFIGURE_ARGS += \
@@ -53,6 +57,7 @@ CONFIGURE_ARGS += \
 	--enable-intf-free \
 	--enable-intf-open \
 	--enable-intf-imb \
-	--enable-ipmishell
+	--enable-ipmishell \
+	--disable-registry-download
 
 $(eval $(call BuildPackage,ipmitool))
